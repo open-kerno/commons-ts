@@ -85,6 +85,18 @@ money(10, 'USD').divide(3).getValue(); // 3.33
 money(9, 'USD').divide(3).getValue();  // 3
 ```
 
+### `pow(exponent)`
+
+Raises the current amount to the given `exponent` using fast exponentiation (binary method) for integer exponents, falling back to `Math.pow` for fractional ones. Returns a new `Money` instance rounded to the currency scale.
+
+```ts
+money(2, 'USD').pow(3).getValue();    // 8
+money(2, 'USD').pow(-1).getValue();   // 0.5
+money(2, 'USD').pow(0).getValue();    // 1
+money(9, 'USD').pow(0.5).getValue();  // 3
+money(1.1, 'USD').pow(2).getValue();  // 1.21
+```
+
 ### `nonNegative()`
 
 Returns a new `Money` instance with the value clamped to `0` if the current value is negative or `NaN`.
@@ -134,6 +146,7 @@ interface IMoneyOperations {
   subtract(value: number): Money;
   multiply(value: number): Money;
   divide(value: number): Money;
+  pow(exponent: number): Money;
   nonNegative(): Money;
   getValue(): number;
   getCurrencyInfo(): CurrencyInfo;

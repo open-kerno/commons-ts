@@ -189,6 +189,61 @@ describe.each([
 
 describe.each([
   {
+    description: 'should raise to a positive integer exponent (2^3 = 8)',
+    input: moneyInputExample({ value: 2, currencyCode: 'USD' }),
+    exponent: 3,
+    expected: 8.0,
+  },
+  {
+    description: 'should return 1 for exponent 0',
+    input: moneyInputExample({ value: 5, currencyCode: 'USD' }),
+    exponent: 0,
+    expected: 1.0,
+  },
+  {
+    description: 'should return the same value for exponent 1',
+    input: moneyInputExample({ value: 7.5, currencyCode: 'USD' }),
+    exponent: 1,
+    expected: 7.5,
+  },
+  {
+    description: 'should handle negative exponent (2^-1 = 0.5)',
+    input: moneyInputExample({ value: 2, currencyCode: 'USD' }),
+    exponent: -1,
+    expected: 0.5,
+  },
+  {
+    description: 'should handle negative exponent (4^-2 = 0.0625 → rounds to 0.06 USD)',
+    input: moneyInputExample({ value: 4, currencyCode: 'USD' }),
+    exponent: -2,
+    expected: 0.06,
+  },
+  {
+    description: 'should handle fractional exponent via Math.pow (9^0.5 = 3)',
+    input: moneyInputExample({ value: 9, currencyCode: 'USD' }),
+    exponent: 0.5,
+    expected: 3.0,
+  },
+  {
+    description: 'should round to 0 decimals for JPY (3^3 = 27)',
+    input: moneyInputExample({ value: 3, currencyCode: 'JPY' }),
+    exponent: 3,
+    expected: 27,
+  },
+  {
+    description: 'should round result to currency scale (1.1^2 = 1.21 USD)',
+    input: moneyInputExample({ value: 1.1, currencyCode: 'USD' }),
+    exponent: 2,
+    expected: 1.21,
+  },
+])('given Money.pow', ({ description, input, exponent, expected }) => {
+  it(description, () => {
+    expect(money(input.value, input.currencyCode).pow(exponent).getValue()).toBe(expected);
+  });
+});
+
+describe.each([
+  {
     description: 'should support a multi-step chain: (100 + 50) × 1.1 / 2 = 82.5',
     input: moneyInputExample({ value: 100, currencyCode: 'USD' }),
     operation: (m: Money) => m.add(50).multiply(1.1).divide(2),

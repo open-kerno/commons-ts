@@ -134,6 +134,7 @@ export interface IMoneyOperations {
   subtract(value: MoneyInput): Money;
   multiply(value: MoneyInput): Money;
   divide(value: MoneyInput): Money;
+  pow(exponent: number): Money;
 
   nonNegative(): Money;
   getValue(): number;
@@ -192,6 +193,32 @@ export class Money implements IMoneyOperations {
     const precision = this.sumDecimalPlaces(this._value, value);
     const intermediate = currency(this._value, { precision }).multiply(value).value;
     return this.spawn(intermediate);
+  }
+
+  pow(exponent: number): Money {
+    if (!Number.isInteger(exponent)) {
+      return this.spawn(Math.pow(this._value, exponent));
+    }
+
+    let base = this._value;
+    let exp = exponent;
+
+    if (exp < 0) {
+      base = 1 / base;
+      exp = -exp;
+    }
+
+    let result = 1;
+
+    while (exp > 0) {
+      if ((exp & 1) === 1) {
+        result *= base;
+      }
+      base *= base;
+      exp >>= 1;
+    }
+
+    return this.spawn(result);
   }
 
   divide(input: MoneyInput): Money {
