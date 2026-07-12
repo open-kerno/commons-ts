@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+---
+
+# Introduction
+
+`@open-kerno/commons` is a TypeScript utility library built for Node.js services. It provides a set of well-typed, composable helpers across common domains: collections, math, HTTP, errors, logging, and infrastructure.
+
+## What's included
+
+- **Collections** — typed helpers for arrays and maps
+- **Math** — rounding and statistical distribution utilities
+- **HTTP** — status codes and request/response helpers
+- **Errors** — typed error classes with HTTP status codes (`BadRequestError`, `InternalServerError`, etc.)
+- **Logger** — structured logging factory
+- **Infrastructure** — database connection utilities (PostgreSQL)
+- **Object** — plain-object manipulation helpers
+
+## Installation
+
+```bash
+npm install @open-kerno/commons
+```
+
+## Usage
+
+Each domain is available as a named export from the package root:
+
+```ts
+import { createMapFromArray } from '@open-kerno/commons/collections';
+import { BadRequestError } from '@open-kerno/commons/errors/http';
+import { logger } from '@open-kerno/commons/logger';
+```
