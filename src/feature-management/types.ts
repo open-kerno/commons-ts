@@ -6,8 +6,14 @@ export interface FeatureContext {
   userId?: string;
 }
 
+export interface GetServiceConfigParams<T> {
+  context?: FeatureContext;
+  fallback?: T;
+  key: string;
+}
+
 export interface FeatureManagementService {
-  getConfig<T>(key: string, context?: FeatureContext, fallback?: T): T | undefined;
+  getConfig<T>(params: GetServiceConfigParams<T>): T | undefined;
   isEnabled(flag: string, context?: FeatureContext): boolean;
   shutdown(): Promise<void>;
 }

@@ -1,5 +1,5 @@
 import logger from '../logger';
-import { FeatureContext, FeatureManagementService, FeatureProvider } from './types';
+import { FeatureContext, FeatureManagementService, FeatureProvider, GetServiceConfigParams } from './types';
 
 export type { MockProviderConfig } from './providers/mock';
 export { mockProvider } from './providers/mock';
@@ -7,7 +7,13 @@ export type { StatsigProviderConfig } from './providers/statsig';
 export { statsigProvider } from './providers/statsig';
 export type { UnleashProviderConfig } from './providers/unleash';
 export { unleashProvider } from './providers/unleash';
-export type { FeatureContext, FeatureManagementService, FeatureProvider, GetConfigParams } from './types';
+export type {
+  FeatureContext,
+  FeatureManagementService,
+  FeatureProvider,
+  GetConfigParams,
+  GetServiceConfigParams,
+} from './types';
 
 const log = logger('feature-management');
 
@@ -22,7 +28,7 @@ export const featureManagement = async (provider: FeatureProvider): Promise<Feat
   }
 
   return {
-    getConfig: <T>(key: string, context?: FeatureContext, fallback?: T): T | undefined => {
+    getConfig: <T>({ key, context, fallback }: GetServiceConfigParams<T>): T | undefined => {
       if (!ready) return fallback;
       try {
         return provider.getConfig({ key, context, fallback: fallback as T });
