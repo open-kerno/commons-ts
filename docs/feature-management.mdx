@@ -227,6 +227,7 @@ Implement the `FeatureProvider` interface to integrate any other feature flag sy
 
 ```ts
 import {
+  AreEnabledParams,
   FeatureContext,
   FeatureProvider,
   GetConfigParams,
@@ -238,6 +239,7 @@ const myProvider: FeatureProvider = {
     await mySDK.connect();
   },
   isEnabled: ({ flag, context }: IsEnabledParams) => mySDK.isEnabled(flag, context?.userId),
+  areEnabled: ({ flags, context }: AreEnabledParams) => mySDK.areEnabled(flags, context?.userId),
   getConfig: <T>({ key, fallback }: GetConfigParams<T>): T => {
     return (mySDK.getConfig(key) as T) ?? fallback;
   },
